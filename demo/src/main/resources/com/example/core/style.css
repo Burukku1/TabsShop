@@ -1,0 +1,71 @@
+/* Root pane styling */
+.root {
+    -fx-background-color: #f0f0f0; /* Light gray background */
+}
+
+/* Styling for the userPane */
+#leadPane {
+    -fx-background-color: #ffcc00; /* Yellow background */
+}
+
+/* Styling for the GridPane inside userPane */
+#userPane GridPane {
+    -fx-background-color: #e6e6e6; /* Light gray background */
+    -fx-padding: 10px; /* Add some padding */
+}
+
+/* Styling for labels */
+#loginLabel, #basicLoginText {
+    -fx-font-size: 16px;
+    -fx-text-fill: #b0351a; /* Dark orange text color */
+}
+
+/* Styling for buttons */
+#userLibrary, #userButton {
+    -fx-background-color: linear-gradient(to bottom right, #e84b4b, #d27056);
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-text-fill: #fff; /* White text color */
+    -fx-font-size: 14px;
+}
+
+#userLibrary:hover, #userButton:hover {
+    -fx-background-color: linear-gradient(to bottom right, #e70b0b, #a80000);
+}
+
+/* Styling for TextField */
+#searchTextField {
+    -fx-background-color: transparent;
+    -fx-border-color: linear-gradient(to bottom right, #c58372, #b0351a);
+    -fx-border-width: .5px;
+    -fx-font-size: 14px;
+}
+
+#searchTextField:focused {
+    -fx-border-width: 1px;
+}
+
+/* Styling for ScrollPane */
+#resultsScrollPane {
+    -fx-background-color: #fff; /* White background */
+    -fx-border-color: linear-gradient(to bottom right, #c58372, #b0351a);
+    -fx-border-width: 1px;
+}
+
+/* Styling for VBox inside ScrollPane */
+#resultsVBox, #circleBox {
+    -fx-spacing: 5px;
+}
+
+/* Styling for buttons inside VBox */
+#circleBox Button {
+    -fx-background-color: linear-gradient(to bottom right, #ff9900, #ffcc00);
+    -fx-background-radius: 50%; /* Make them round */
+    -fx-padding: 5px; /* Add some padding */
+    -fx-cursor: hand;
+    -fx-text-fill: #fff; /* White text color */
+}
+
+#circleBox Button:hover {
+    -fx-background-color: linear-gradient(to bottom right, #e69500, #ff9900);
+}
