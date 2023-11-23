@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="411.0" prefWidth="592.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+    <children>
+        <AnchorPane prefHeight="411.0" prefWidth="592.0" visible="false">
+            <children>
+                <TitledPane fx:id="leadPane" animated="false" prefHeight="411.0" prefWidth="592.0" text="untitled" visible="false" />
+            </children>
+        </AnchorPane>
+
+        <AnchorPane fx:id="userPane" minHeight="0.0" minWidth="0.0" prefHeight="411.0" prefWidth="592.0">
+            <children>
+                <GridPane layoutX="415.0" layoutY="11.0" prefHeight="256.0" prefWidth="169.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="106.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="93.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="126.0" minHeight="10.0" prefHeight="126.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="125.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="112.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label fx:id="loginLabel" alignment="TOP_CENTER" text="mylog" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Label fx:id="basicLoginText" alignment="TOP_CENTER" text="login:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Button fx:id="userLibrary" mnemonicParsing="false" onAction="#showUserLibrary" text="Library" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                        <Label text="songCount" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                    </children>
+                </GridPane>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutY="-1.0" prefHeight="395.0" prefWidth="183.0">
+            <children>
+
+                <ScrollPane fx:id="resultsScrollPane" layoutX="7.0" layoutY="36.0" prefHeight="359.0" prefWidth="169.0">
+                    <content>
+                        <HBox>
+                            <VBox fx:id="resultsVBox" spacing="5">
+                            </VBox>
+                            <VBox fx:id="circleBox" spacing="5">
+                            </VBox>
+                        </HBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </AnchorPane>
+        <Button fx:id="userButton" layoutX="525.0" layoutY="12.0" mnemonicParsing="false" onAction="#userButtonPushed" prefHeight="33.0" prefWidth="54.0" text="Profile" AnchorPane.bottomAnchor="366.0" AnchorPane.leftAnchor="525.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="12.0" />
+
+          <TextField fx:id="searchTextField" promptText="Введите запрос" />
+    </children>
+</AnchorPane>

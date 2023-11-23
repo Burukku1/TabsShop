@@ -9,6 +9,10 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -16,6 +20,10 @@ import java.util.Set;
 public class UserDao implements IUserDao {
 
     private final EntityManagerFactory emf;
+
+    private static final String url = "dbc:postgresql://localhost:5432/tabshop";
+    private static final String userrr = "postgres";
+    private static final String password = "postgres";
 
     public UserDao(EntityManagerFactory emf) {
         this.emf = emf;
@@ -98,13 +106,69 @@ public class UserDao implements IUserDao {
         }
     }
 
+
+    /**
+     * //textFiled для поиска
+     * @param req
+     * @return list of tabs
+     * find all совпадени
+     *
+     */
+
     @Override
-    public List<Tabs> showSearchResult(String name) {
-        return null;
+    public List<Tabs> showSearchResult(String req){
+        EntityManager em = emf.createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Tabs> cQuery = cb.createQuery(Tabs.class);
+        Root<Tabs> c = cQuery.from(Tabs.class);
+        cQuery.select(c).where(cb.like(c.get("songName"), req+"%"));
+        TypedQuery<Tabs> query = em.createQuery(cQuery);
+        List<Tabs> tabs = query.getResultList();
+        return tabs;
     }
 
     @Override
-    public List<Tabs> showMyTabs(User user) {
-        return null;
+    public void addTabToUserLibrary(User user, Long tabIdentif) { //todo прислать нормланого //кнопка для добавления в базу (круглая кнопка)
+        //   пользователя не dto
+        Connection con = null;
+        try {
+            con = DriverManager.getConnection(url, userrr, password);
+            con.setAutoCommit(false);
+            PreparedStatement stmt = con.prepareStatement(
+                    "INSERT INTO user_tabs_junction(user_id, tab_id) VALUES(?, ?)");
+            stmt.setLong(1, user.getUserId());
+            stmt.setLong(2, tabIdentif);
+            stmt.executeUpdate();
+            con.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Tabs> showMyTabs(User user) { //todo profile button
+        EntityManager em = emf.createEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<User> userQuery = cb.createQuery(User.class);
+            Root<User> userRoot = userQuery.from(User.class);
+            userRoot.fetch("tabs", JoinType.LEFT);
+//            Kostyl kostyl = new Kostyl();
+//            try {
+//                kostyl.SetUserIdFromDB(user);
+//            } catch (SQLException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+            userQuery.select(userRoot).where(cb.equal(userRoot.get("userId"), user.getUserId()));
+            User myUser = em.createQuery(userQuery).getSingleResult();
+            // List<Tabs> tabs = em.createQuery(userQuery).getResultList();
+            Set<Tabs> tabs = myUser.getTabs();
+            List<Tabs> list = List.copyOf(tabs);
+            return list;
+
+        } finally {
+            em.close();
+        }
     }
 }

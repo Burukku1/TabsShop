@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.service.MainService;
+import com.example.service.api.IMainService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,6 +16,8 @@ import javafx.scene.shape.Circle;
 public class MainController {
 
     private boolean isUserPaneOpened;
+
+    private IMainService mainService = new MainService();
 
 
     @FXML
