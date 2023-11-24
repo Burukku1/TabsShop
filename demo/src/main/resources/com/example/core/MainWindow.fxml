@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="411.0" prefWidth="592.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight=" 411.0" prefWidth="592.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.MainController">
 
     <stylesheets>
         <URL value="@style.css" />
     </stylesheets>
     <children>
-        <AnchorPane prefHeight="411.0" prefWidth="592.0" visible="false">
-            <children>
-                <TitledPane fx:id="leadPane" animated="false" prefHeight="411.0" prefWidth="592.0" text="untitled" visible="false" />
-            </children>
+
+        <AnchorPane fx:id="tabPane" layoutY="6.0" prefHeight="411.0" prefWidth="592.0" >
+         <children>
+            <TextArea fx:id="tabArea" layoutX="172.0" layoutY="26.0" prefHeight="359.0" prefWidth="348.0" />
+         </children>
         </AnchorPane>
 
         <AnchorPane fx:id="userPane" minHeight="0.0" minWidth="0.0" prefHeight="411.0" prefWidth="592.0">
@@ -37,7 +47,7 @@
                 </GridPane>
             </children>
         </AnchorPane>
-        <AnchorPane layoutY="-1.0" prefHeight="395.0" prefWidth="183.0">
+        <AnchorPane fx:id="scrollPane" layoutY="-1.0" prefHeight="395.0" prefWidth="183.0" >
             <children>
 
                 <ScrollPane fx:id="resultsScrollPane" layoutX="7.0" layoutY="36.0" prefHeight="359.0" prefWidth="169.0">

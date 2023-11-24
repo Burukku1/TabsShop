@@ -14,4 +14,6 @@ public interface IMainService {
      List<Tabs> showMyTabs(User user);
 
      List<Tabs> showSearchResult(String req);
+
+     String displayTab(Tabs tab);
 }

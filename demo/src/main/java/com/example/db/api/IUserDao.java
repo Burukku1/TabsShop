@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserDao {
+
+    String displayTab(Tabs tab);
     void createUser(User user);
     Optional<User> checkUserLog(User user);
     boolean checkUserPass(User user);

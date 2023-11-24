@@ -9,19 +9,24 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.Set;
 
 public class UserDao implements IUserDao {
 
     private final EntityManagerFactory emf;
 
-    private static final String url = "dbc:postgresql://localhost:5432/tabshop";
+    private static final String url = "jdbc:postgresql://localhost/tabshop";
     private static final String userrr = "postgres";
     private static final String password = "postgres";
 
@@ -153,22 +158,48 @@ public class UserDao implements IUserDao {
             CriteriaQuery<User> userQuery = cb.createQuery(User.class);
             Root<User> userRoot = userQuery.from(User.class);
             userRoot.fetch("tabs", JoinType.LEFT);
-//            Kostyl kostyl = new Kostyl();
-//            try {
-//                kostyl.SetUserIdFromDB(user);
-//            } catch (SQLException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
             userQuery.select(userRoot).where(cb.equal(userRoot.get("userId"), user.getUserId()));
             User myUser = em.createQuery(userQuery).getSingleResult();
             // List<Tabs> tabs = em.createQuery(userQuery).getResultList();
             Set<Tabs> tabs = myUser.getTabs();
             List<Tabs> list = List.copyOf(tabs);
             return list;
-
         } finally {
             em.close();
         }
+    }
+
+    @Override
+    public String displayTab(Tabs tab){
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        String pathName = tab.getLinkPath();
+        System.out.println(pathName);
+        try {
+            File file = new File(pathName);
+            if (file.exists()) {
+                Scanner fileIn = new Scanner(file);
+                while(fileIn.hasNextLine()){
+                    if(count == 6){
+                        sb.append("\n\n");
+                        count = 0;
+                    }
+                    sb.append("\n");
+                    sb.append(fileIn.nextLine());
+                    count++;
+                }
+                fileIn.close();
+            } else {
+                System.out.println("Файл не существует.");
+            }
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return sb.toString();
     }
 }

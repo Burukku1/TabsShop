@@ -1,21 +1,33 @@
 package com.example.controller;
 
+import com.example.db.entity.Tabs;
+import com.example.db.entity.User;
 import com.example.service.MainService;
 import com.example.service.api.IMainService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+
+import java.util.List;
 
 
 public class MainController {
 
     private boolean isUserPaneOpened;
+
+    private boolean isTabPaneOpened;
+    private User singInUser = null;
+
+    public User getSingInUser() {
+        return singInUser;
+    }
+
+    public void setSingInUser(User singInUser) {
+        this.singInUser = singInUser;
+    }
 
     private IMainService mainService = new MainService();
 
@@ -24,6 +36,15 @@ public class MainController {
     private Label loginLabel; //todo to show user login when we show userPane(init this label when we show this window)
     @FXML
     private AnchorPane userPane;
+
+    @FXML
+    private AnchorPane tabPane;
+
+    @FXML
+    private AnchorPane scrollPane;
+
+    @FXML
+    private TextArea tabArea;
 
     @FXML
     private Button userLibrary;
@@ -57,15 +78,19 @@ public class MainController {
         resultsVBox.getChildren().clear();
         circleBox.getChildren().clear();
 
-        // todo: Запрос к базе данных для поиска ваших табов (go to service)
+        List<Tabs> tabs = mainService.showSearchResult(searchText);
 
         // Пример добавления результатов вручную
-        for (int i = 0; i < 5; i++) {
-            Button resultButton = createResultButton("Результат " + i);
+        for (Tabs tab : tabs) {
+
+            Button resultButton = createResultButton(tab.getSongName());
+            resultButton.setId(tab.getLinkPath());
             Button plusButton = createResultButton("+");
             plusButton.setShape(new Circle(3));
-            plusButton.setOnAction(e -> handlePlusButtonClick(plusButton.getText()));
-            resultButton.setOnAction(e -> handleResultButtonClick(resultButton.getText()));
+            plusButton.setId(tab.getTabId().toString());
+            plusButton.setOnAction(e -> handlePlusButtonClick(plusButton));
+            resultButton.setOnAction(e -> handleResultButtonClick(resultButton));
+
             resultsVBox.getChildren().add(resultButton);
             circleBox.getChildren().add(plusButton);
         }
@@ -74,34 +99,61 @@ public class MainController {
     }
 
 
-
-    private void handlePlusButtonClick(String buttonText) {
-        System.out.println("Plus button clicked: " + buttonText);
+    private void handlePlusButtonClick(Button plusButton) {
+        Long id = Long.valueOf(plusButton.getId());
+        mainService.addTabToUserLibrary(singInUser, id);
     }
+
     private Button createResultButton(String text) {
         Button button = new Button(text);
         button.setStyle("-fx-border-color: black; -fx-padding: 5px;");
         return button;
     }
 
-    private void handleResultButtonClick(String buttonText) {
-        //todo open new big pane with tabs (go to service)
+    private void handleResultButtonClick(Button resultButton) {
+        String linkPath = resultButton.getId();
+        Tabs tab = new Tabs();
+        tab.setLinkPath(linkPath);
+        String str = mainService.displayTab(tab);
+        tabArea.clear();
+        tabArea.appendText(str);
+
     }
 
 
     @FXML
-    public void showUserLibrary(ActionEvent event){
-        if (event.getSource() == userLibrary){
-            //todo  show userLibrary (go to service)
+    public void showUserLibrary(ActionEvent event) {
+        if (event.getSource() == userLibrary) {
+
+            if (isTabPaneOpened) {
+
+                tabArea.clear();
+                tabArea.setVisible(false);
+                isUserPaneOpened = false;
+
+            } else {
+                isUserPaneOpened = true;
+
+                List<Tabs> tabList = mainService.showMyTabs(singInUser);
+
+                tabArea.clear();
+
+                // Iterate through the list and append names to the textArea
+                for (Tabs tab : tabList) {
+                    tabArea.appendText(tab.getSongName() + "\n");
+                }
+                tabArea.setVisible(true);
+            }
         }
     }
-@FXML
-    public void userButtonPushed(ActionEvent event){
-        if (event.getSource() == userButton){
-            if (isUserPaneOpened){
+
+    @FXML
+    public void userButtonPushed(ActionEvent event) {
+        if (event.getSource() == userButton) {
+            if (isUserPaneOpened) {
                 userPane.setVisible(false);
                 isUserPaneOpened = false;
-            }else {
+            } else {
                 userPane.setVisible(true);
                 isUserPaneOpened = true;
             }

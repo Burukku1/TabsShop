@@ -32,4 +32,9 @@ public class MainService implements IMainService {
     public List<Tabs> showSearchResult(String req) {
         return userDao.showSearchResult(req);
     }
+
+    @Override
+    public String displayTab(Tabs tab) {
+        return userDao.displayTab(tab);
+    }
 }

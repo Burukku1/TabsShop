@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import com.example.core.dto.UserDto;
+import com.example.db.UserDao;
+import com.example.db.entity.User;
 import com.example.service.RegistrationService;
 import com.example.service.api.IRegistrationService;
 import javafx.animation.TranslateTransition;
@@ -14,7 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
+
 
 public class HelloController {
 
@@ -84,8 +86,9 @@ public class HelloController {
             userDto.setPassword(password);
 
             if (registrationService.checkUserLog(userDto).isPresent() && registrationService.checkUserPass(userDto)) {
+                User user = registrationService.checkUserLog(userDto).get();
                 loginErrorLabel.setVisible(false);
-                openSecondWindow(event);
+                openSecondWindow(event, user);
             } else {
                 loginErrorLabel.setVisible(true);
             }
@@ -106,13 +109,16 @@ public class HelloController {
             userDto.setEmail(email);
 
             if (!registrationService.checkUserLog(userDto).isPresent()) {
+
                 registrationService.createUser(userDto);
+
+                User user = registrationService.checkUserLog(userDto).get();
 
                 signupErrorLabel.setVisible(false);
 
                 System.out.println("open second window");
 
-                openSecondWindow(event);
+                openSecondWindow(event, user);
             } else {
                 signupErrorLabel.setVisible(true);
             }
@@ -146,7 +152,7 @@ public class HelloController {
         }
     }
 
-    public void openSecondWindow(ActionEvent event) {
+    public void openSecondWindow(ActionEvent event, User user) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/core/MainWindow.fxml"));
             Parent root1 = fxmlLoader.load();
@@ -159,6 +165,8 @@ public class HelloController {
             Scene scene = new Scene(root1);
             stage.setScene(scene);
 
+            MainController mainController = fxmlLoader.getController();
+            mainController.setSingInUser(user);
             // Покажите второе окно
             stage.show();
 
